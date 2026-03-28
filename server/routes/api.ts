@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import nodemailer from 'nodemailer';
-import Stripe from 'stripe';
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import fs from 'fs';
 import path from 'path';
@@ -10,22 +9,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = Router();
-let stripeClient: Stripe | null = null;
-
-function getStripe(): Stripe {
-  if (!stripeClient) {
-    const key = process.env.STRIPE_SECRET_KEY;
-    if (!key) {
-      console.warn('STRIPE_SECRET_KEY environment variable is missing. Stripe payments will fail.');
-      // We don't throw here to allow the rest of the app to start, but it will fail when used.
-      // Actually, it's better to throw when used.
-      stripeClient = new Stripe('', { apiVersion: '2023-10-16' as any }); // Use an empty string so it doesn't crash, but fails on API call
-    } else {
-      stripeClient = new Stripe(key);
-    }
-  }
-  return stripeClient;
-}
 
 
 // Initialize Firebase Admin
@@ -65,9 +48,11 @@ router.get('/health', (req, res) => {
 router.get('/config-status', (req, res) => {
   const status = {
     firebase: !!process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
-    stripe: !!process.env.STRIPE_SECRET_KEY && !!process.env.VITE_STRIPE_PUBLIC_KEY,
     youtube: !!process.env.YOUTUBE_API_KEY,
     bkash: !!process.env.BKASH_APP_KEY && !!process.env.BKASH_APP_SECRET && !!process.env.BKASH_USERNAME && !!process.env.BKASH_PASSWORD,
+    rocket: !!process.env.ROCKET_APP_KEY,
+    nagad: !!process.env.NAGAD_APP_KEY,
+    upay: !!process.env.UPAY_APP_KEY,
     smtp: !!process.env.SMTP_HOST && !!process.env.SMTP_USER && !!process.env.SMTP_PASS,
   };
 
@@ -80,22 +65,6 @@ router.get('/config-status', (req, res) => {
     status,
     missing
   });
-});
-
-// Stripe Payment Intent
-router.post('/create-payment-intent', async (req, res) => {
-  try {
-    const stripe = getStripe();
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 2000, // $20.00
-      currency: 'usd',
-    });
-
-    res.json({ clientSecret: paymentIntent.client_secret });
-  } catch (error) {
-    console.error('Stripe error:', error);
-    res.status(500).json({ error: 'Failed to create payment intent' });
-  }
 });
 
 // bKash Payment Create
@@ -198,6 +167,20 @@ router.post('/rocket/create-payment', async (req, res) => {
   // Simulate Rocket API call
   console.log('Initiating Rocket payment...');
   res.json({ success: true, paymentUrl: 'https://rocket.com/payment-gateway-url' });
+});
+
+// Nagad Payment
+router.post('/nagad/create-payment', async (req, res) => {
+  // Simulate Nagad API call
+  console.log('Initiating Nagad payment...');
+  res.json({ success: true, paymentUrl: 'https://nagad.com.bd/payment-gateway-url' });
+});
+
+// Upay Payment
+router.post('/upay/create-payment', async (req, res) => {
+  // Simulate Upay API call
+  console.log('Initiating Upay payment...');
+  res.json({ success: true, paymentUrl: 'https://upay.com.bd/payment-gateway-url' });
 });
 
 // Email confirmation endpoint

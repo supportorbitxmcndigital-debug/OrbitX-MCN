@@ -195,7 +195,7 @@ const CreatorSubmitForm: React.FC = () => {
             whileTap={{ scale: 0.98 }}
             type="submit" 
             disabled={formStatus === 'sending' || formStatus === 'success'} 
-            className={`relative w-full py-6 rounded-3xl font-black text-white shadow-2xl transition-all flex items-center justify-center gap-3 overflow-hidden text-lg tracking-widest ${formStatus === 'success' ? 'bg-emerald-500' : 'bg-orbit-600 hover:bg-orbit-500'}`}
+            className={`relative w-full py-6 rounded-3xl font-black text-white shadow-2xl transition-all flex items-center justify-center gap-3 overflow-hidden text-lg tracking-widest ${formStatus === 'success' ? 'bg-emerald-500' : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:via-indigo-500 hover:to-violet-500'}`}
           >
             {/* Shimmer Effect */}
             {formStatus === 'idle' && (

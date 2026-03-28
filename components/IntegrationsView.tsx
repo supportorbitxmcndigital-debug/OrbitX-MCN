@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Blocks, CheckCircle, ExternalLink, MessageSquare, Slack, CreditCard, Cloud, Youtube, AlertCircle, RefreshCw, Send, X } from 'lucide-react';
+import { Blocks, CheckCircle, ExternalLink, MessageSquare, Slack, Cloud, Youtube, AlertCircle, RefreshCw, Send, X } from 'lucide-react';
 
 interface Integration {
   id: string;
@@ -16,7 +16,6 @@ const IntegrationsView: React.FC = () => {
     { id: 'discord', name: 'Discord', description: 'Send automated announcements and stats to your community server.', icon: MessageSquare, color: 'text-indigo-400', category: 'Communication', status: 'Disconnected' },
     { id: 'slack', name: 'Slack', description: 'Notify your team about payouts, new creators, and system alerts.', icon: Slack, color: 'text-emerald-400', category: 'Communication', status: 'Disconnected' },
     { id: 'youtube', name: 'YouTube Network', description: 'Sync MCN-level analytics and CMS asset management rights.', icon: Youtube, color: 'text-red-500', category: 'Social', status: 'Connected' },
-    { id: 'stripe', name: 'Stripe', description: 'Process international payouts and handle subscription billing.', icon: CreditCard, color: 'text-blue-400', category: 'Finance', status: 'Disconnected' },
     { id: 'drive', name: 'Google Drive', description: 'Automated contract backup and asset sharing for creators.', icon: Cloud, color: 'text-yellow-400', category: 'Storage', status: 'Disconnected' },
   ]);
 
